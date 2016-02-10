@@ -20,9 +20,9 @@ was written for this script.
 - The Pimoroni Crew -
 
 DISCLAIMER
-
+installdeb="yes" # install the debian packages required for the RPI 2 under non Rasbian
 productname="Display-o-Tron 3000/HAT" # the name of the product to install
-scriptname="displayotron" # the name of this script
+scriptname="install.sh" # the name of this script
 forcesudo="no" # whether the script requires to be ran with root privileges
 promptreboot="no" # whether the script should always prompt user to reboot
 customcmd="no" # whether to execute commands specified before exit
@@ -153,15 +153,11 @@ echo "$productname"
 echo ""
 warning "--- Warning ---"
 echo ""
-echo "Always be careful when running scripts and commands"
-echo "copied from the internet. Ensure they are from a"
-echo "trusted source."
-echo ""
-echo "If you want to see what this script does before"
-echo "running it, you should run:"
-echo "    \curl -sS get.pimoroni.com/$scriptname"
-echo ""
-
+echo "THIS MIGHT BREAK YOUR INSTALLATION"
+echo "MAKE A BACKUP COPY OF YOUR SD CARD"
+echo "BEFORE CONTINUING. USE WITH CAUTION!"
+echo "IF YOU CONTINUE THEN YOU AGREE TO TRANSFER"
+echo " RESPONSIBILITY TO YOURSELF."
 if confirm "Do you wish to continue?"; then
 
     echo ""
@@ -183,6 +179,19 @@ if confirm "Do you wish to continue?"; then
 
     echo ""
     echo "Checking install requirements..."
+    
+    if [ $installdeb == "yes" ]; then
+        echo ""
+        if confirm "Would you like to install the required build dependencies?"; then
+            dpkg -i ./deb/liblua5.1-0_5.1.5-8_armhf.deb
+            dpkg -i ./deb/lua5.1_5.1.5-7.1_armhf.deb
+            dpkg -i ./deb/python3-rpi.gpio_0.6.1-1_armhf.deb
+            dpkg -i ./deb/python-rpi.gpio_0.6.1-1_armhf.deb
+            dpkg -i ./deb/triggerhappy_0.3.4-2_armhf.deb
+            dpkg -i ./deb/raspi-config_20160210_all.deb
+            dpkg -i ./deb/python3-smbus_3.1.1+svn-1_armhf.deb
+        fi
+    fi
 
     for pkgdep in ${pkgdeplist[@]}
         do if apt_pkg_req "$pkgdep" ; then
